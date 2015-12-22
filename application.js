@@ -55,14 +55,14 @@ var parse_configuration = function(config, fn){
             }));
         }
         else
-            applications[app_name].env_vars = {}
-;
+            applications[app_name].env_vars = {};
+
         applications[app_name].tags = application.tags || {};
         applications[app_name].command = application.command ? application.command : "";
-        applications[app_name].cpus = application.cpu_shares ? parseFloat((application.cpu_shares / 1000).toFixed(2)) : config.cpus;
-        applications[app_name].memory = application.memory ? parseFloat((application.mem_limit / (1024 * 1024)).toFixed(2)) : config.memory;
-        applications[app_name].respawn = application.restart && application.restart == "no" ? false : config.respawn;
-        applications[app_name].network_mode = application.net ?  application.net : config.network_mode;
+        applications[app_name].cpus = application.cpu_shares ? parseFloat((application.cpu_shares / 1000).toFixed(2)) : config.options.cpus;
+        applications[app_name].memory = application.memory ? parseFloat((application.mem_limit / (1024 * 1024)).toFixed(2)) : config.options.memory;
+        applications[app_name].respawn = application.restart && application.restart == "no" ? false : config.options.respawn;
+        applications[app_name].network_mode = application.net ?  application.net : config.options.network_mode;
 
         if(application.ports && !_.isEmpty(application.ports)){
             if(application.ports.length > 1)
