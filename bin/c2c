@@ -1,0 +1,56 @@
+#!/usr/bin/env node
+var nomnom = require("nomnom");
+var C2C = require([__dirname, "..", "application"].join("/"));
+var _ = require("lodash");
+var fs = require("fs");
+
+nomnom.script("c2c");
+
+nomnom.options({
+    "docker-compose": {
+        position: 0,
+        help: "Path to Docker compose file",
+        default: "./docker-compose.yml"
+    },
+
+    "containership-compose": {
+        position: 1,
+        help: "Path to ContainerShip compose file",
+        default: "./containership-compose.yml"
+    },
+
+    output: {
+        abbr: "o",
+        metavar: "OUTPUT",
+        help: "File where resulting ContainerShip JSON schema should be stored",
+        required: false,
+    }
+});
+
+var options = nomnom.parse();
+
+try{
+    var c2c = new C2C({
+       compose_path: options["docker-compose"],
+       containership_path: options["containership-compose"]
+    });
+}
+catch(err){
+    throw err;
+}
+
+c2c.convert(function(err, json){
+    if(err)
+        throw err;
+
+    if(_.isUndefined(options.output))
+        console.log(json);
+    else{
+        fs.writeFile(options.output, JSON.stringify(json, null, 2), function(err){
+            if(err)
+                throw err;
+
+            console.log(["Successfully wrote ContainerShip JSON to", options.output].join(" "));
+        });
+    }
+});
