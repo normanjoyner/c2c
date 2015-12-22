@@ -46,7 +46,17 @@ var parse_configuration = function(config, fn){
         applications[app_name] = {};
         applications[app_name].id = app_name;
         applications[app_name].image = application.image;
-        applications[app_name].env_vars = application.environment || {};
+
+        if(_.has(application, "environment") && _.isPlainObject(application.environment))
+            applications[app_name].env_vars = application.environment;
+        else if(_.has(application, "environment") && _.isArray(application.environment)){
+            applications[app_name].env_vars = _.zipObject(_.map(application.environment, function(env_var){
+                return env_var.split("=");
+            }));
+        }
+        else
+            applications[app_name].env_vars = {}
+;
         applications[app_name].tags = application.tags || {};
         applications[app_name].command = application.command ? application.command : "";
         applications[app_name].cpus = application.cpu_shares ? parseFloat((application.cpu_shares / 1000).toFixed(2)) : config.cpus;
