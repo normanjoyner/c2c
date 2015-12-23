@@ -64,6 +64,15 @@ var parse_configuration = function(config, fn){
         applications[app_name].respawn = application.restart && application.restart == "no" ? false : config.options.respawn;
         applications[app_name].network_mode = application.net ?  application.net : config.options.network_mode;
 
+        var containers = application.containers ? _.parseInt(application.containers) : 0;
+        applications[app_name].containers = [];
+
+        _.times(containers, function(){
+            applications[app_name].containers.push({});
+        });
+
+        applications[app_name].tags = application.tags || {};
+
         if(application.ports && !_.isEmpty(application.ports)){
             if(application.ports.length > 1)
                 applications[app_name].network_mode = "host";
