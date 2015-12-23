@@ -1,6 +1,6 @@
 {
   "name": "c2c",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Transform Docker compose YAML configuration files to ContainerShip JSON representation",
   "main": "application.js",
   "scripts": {
