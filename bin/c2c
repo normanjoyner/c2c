@@ -44,7 +44,7 @@ c2c.convert(function(err, json){
         throw err;
 
     if(_.isUndefined(options.output))
-        console.log(json);
+        console.log(JSON.stringify(json, null, 2));
     else{
         fs.writeFile(options.output, JSON.stringify(json, null, 2), function(err){
             if(err)
